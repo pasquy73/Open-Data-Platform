@@ -1,0 +1,218 @@
+List of commands (APIs) to test
+
+**************************************
+**** Create subscription in ORION ****
+**************************************
+
+------------------- Note ------------------- 
+- to use these commands in Orion VM, copy subscription.json and emebedded.json files 
+- to run the script copy unibo.jar file
+--------------------------------------------
+
+1. create subscription
+curl -vX POST http://localhost:1026/v2/subscriptions  -s -S --header "Content-Type: application/json" --header "Fiware-Service: eng" --header "Fiware-ServicePath: /sacher" -d @subscription.json
+
+2. check the subscription
+curl http://localhost:1026/v2/subscriptions  -s -S --header "Fiware-Service: eng" --header "Fiware-ServicePath: /sacher"
+
+you can read the id (if you want to delete it), the status (active), etc...
+
+3. delete the subscription by using the id
+curl -vX DELETE http://localhost:1026/v2/subscriptions/5afd7bf0d309dc24e638f0ed  -s -S --header "Fiware-Service: eng" --header "Fiware-ServicePath: /sacher"
+
+
+************************************************
+**** Check the context information in ORION ****
+************************************************
+
+1. read context information in Orion
+curl http://localhost:1026/v2/entities -s -S --header "Fiware-Service: eng" --header "Fiware-ServicePath: /sacher" 
+
+2. read the total number of items in Orion
+curl -s -S --header "Fiware-Service: eng" --header "Fiware-ServicePath: /sacher"  http://localhost:1026/v2/entities?limit=100&options=count
+
+the Fiware-Total-Count attribute is in the header
+
+
+************************************************************
+**** Prepare Organization, Dataset and Resource in CKAN ****
+************************************************************
+
+Note - use always Authorization : 739a3394-0dd5-4e0b-afe8-f42f2ea5c354 in the header
+
+1. create eng organization in ckan
+POST - http://217.172.12.159/api/action/organization_create
+{
+	"name": "eng"
+}
+
+2. create eng_sacher package/dataset in ckan
+POST - http://217.172.12.159/api/action/package_create
+{
+	"name": "eng_sacher",
+	"owner_org": "eng"
+}
+
+3. create unibo resource in ckan
+POST - http://217.172.12.159/api/action/resource_create
+{
+	"package_id": "eng_sacher",
+	"url": "localhost",
+	"name": "unibo_pointofinterest"
+}
+
+4. get resource_id 
+GET - http://217.172.12.159/api/action/package_show?id=eng_sacher
+
+the resource_id is in result.resources.id 
+
+9f950f5e-919d-492a-9c1b-f37b3e4ba3d2
+
+5. create datastore with resource_id = 9f950f5e-919d-492a-9c1b-f37b3e4ba3d2
+POST - http://217.172.12.159/api/action/datastore_create
+{
+	"resource_id": "9f950f5e-919d-492a-9c1b-f37b3e4ba3d2",
+	"force": "True",
+	"fields": [{
+		"type": "json",
+		"id": "uid"
+	}, {
+		"type": "json",
+		"id": "materiale_id"
+	}, {
+		"type": "json",
+		"id": "start_date"
+	}, {
+		"type": "json",
+		"id": "end_date"
+	}, {
+		"type": "json",
+		"id": "location_id"
+	}, {
+		"type": "json",
+		"id": "attivita_id"
+	}, {
+		"type": "json",
+		"id": "materiale_category"
+	}, {
+		"type": "json",
+		"id": "materiale_type"
+	}, {
+		"type": "json",
+		"id": "materiale_subtype"
+	}, {
+		"type": "json",
+		"id": "attivita"
+	}, {
+		"type": "json",
+		"id": "ambito"
+	}, {
+		"type": "json",
+		"id": "subattivita"
+	}, {
+		"type": "json",
+		"id": "l1"
+	}, {
+		"type": "json",
+		"id": "l0"
+	}, {
+		"type": "json",
+		"id": "date"
+	}, {
+		"type": "json",
+		"id": "timestamp"
+	}, {
+		"type": "json",
+		"id": "weekend"
+	}, {
+		"type": "json",
+		"id": "day_of_week"
+	}, {
+		"type": "json",
+		"id": "month"
+	}, {
+		"type": "json",
+		"id": "month_day"
+	}, {
+		"type": "json",
+		"id": "year"
+	}, {
+		"type": "json",
+		"id": "week_starting_monday"
+	}, {
+		"type": "json",
+		"id": "gid"
+	}, {
+		"type": "json",
+		"id": "nome"
+	}, {
+		"type": "json",
+		"id": "denominazioni"
+	}, {
+		"type": "json",
+		"id": "proprietario_pubblico"
+	}, {
+		"type": "json",
+		"id": "tipologie_cronologie"
+	}, {
+		"type": "json",
+		"id": "categoria"
+	}, {
+		"type": "json",
+		"id": "eta"
+	}, {
+		"type": "json",
+		"id": "eta_attestazione"
+	}, {
+		"type": "json",
+		"id": "wkt"
+	}, {
+		"type": "json",
+		"id": "provincia"
+	}, {
+		"type": "json",
+		"id": "comune"
+	}, {
+		"type": "json",
+		"id": "diocesi"
+	}, {
+		"type": "json",
+		"id": "frazione"
+	}, {
+		"type": "json",
+		"id": "indirizzo"
+	}, {
+		"type": "json",
+		"id": "name"
+	}, {
+		"type": "json",
+		"id": "description"
+	}, {
+		"type": "json",
+		"id": "category"
+	}, {
+		"type": "json",
+		"id": "location"
+	}, {
+		"type": "json",
+		"id": "location_md"
+	}, {
+		"type": "timestamp",
+		"id": "recvTime"
+	}, {
+		"type": "text",
+		"id": "fiwareServicePath"
+	}, {
+		"type": "text",
+		"id": "entityId"
+	}, {
+		"type": "text",
+		"id": "entityType"
+	}]
+}
+
+****************************
+**** Run the JAR script ****
+****************************
+
+java -jar unibo.jar embedded.json
